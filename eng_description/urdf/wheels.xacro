@@ -1,0 +1,101 @@
+<?xml version="1.0" ?>
+<!-- =================================================================================== -->
+<!-- |    Wheels for the robot Jaguar V2 - - - Versionado por Jorge                    | -->
+<!-- |    Jorge De Leon Rivas - - - jorge.deleon@upm.es                                | -->
+<!-- |    September / 6 / 2018                                                         | -->
+<!-- =================================================================================== -->
+
+<robot name="wheel_aux" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- Constants -->
+<xacro:property name="wheel_max_effort"     value="100"/>
+<xacro:property name="wheel_max_velocity"   value="20" />
+
+<xacro:macro name="wheel_aux" params="name parent_link flipper *origin">
+
+<!--=====================================================================-->
+<!--        Definition of the wheels of the robot                        -->
+<!--=====================================================================-->
+
+<!-- Link of the Wheel -->
+<link name="${name}_wheel">
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.0001"/>
+        <inertia ixx="${1}"
+                 ixy="${0}"     iyy="${1}"
+                 ixz="${0}"     iyz="${0}"      izz="${1}"/>
+    </inertial>
+
+    <visual>
+        <origin xyz="0 0 0" rpy="${0} 0 0"/>
+        <xacro:if value="${flipper == 1}">
+            <geometry>
+                <cylinder length="0.02" radius="0.035"/>
+            </geometry>
+        </xacro:if>
+        <xacro:if value="${flipper == 0}">
+            <geometry>
+                <cylinder length="0.02" radius="0.07"/>
+            </geometry>
+        </xacro:if>
+        <material name="grey"/>
+    </visual>
+
+    <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin xyz="0 0 0" rpy="${0} 0 0"/>
+        <xacro:if value="${flipper == 1}">
+            <geometry>
+                <cylinder length="0.02" radius="0.035"/>
+            </geometry>
+        </xacro:if>
+        <xacro:if value="${flipper == 0}">
+            <geometry>
+                <cylinder length="0.02" radius="0.07"/>
+            </geometry>
+        </xacro:if>
+    </collision>
+</link>
+
+<!-- Joint of the Wheel -->
+<joint name="${name}_wheel_to_${parent_link}_joint" type="continuous">
+    <xacro:insert_block name="origin"/>
+    <parent link="${parent_link}"/>
+    <child link="${name}_wheel"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="${wheel_max_effort}" velocity="${wheel_max_velocity}" /> <!-- Nm rads/s -->
+</joint>
+
+<!-- Transmission of the Wheel -->
+<transmission name="${name}_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${name}_wheel_to_${parent_link}_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <xacro:if value="${flipper == 1}">
+        <actuator name="${name}_motor_joint_flipper">
+            <mechanicalReduction>1</mechanicalReduction>
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </actuator>
+    </xacro:if>
+    <xacro:if value="${flipper == 0}">
+        <actuator name="${name}_motor_joint_base">
+            <mechanicalReduction>1</mechanicalReduction>
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </actuator>
+    </xacro:if>
+</transmission>
+
+<gazebo reference="${name}_wheel">
+    <mu1 value="100000.0"/>
+    <mu2 value="100000.0"/>
+    <kp  value="10000000.0" />
+    <kd  value="1.0" />
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Grey</material>
+</gazebo>
+
+</xacro:macro>
+
+</robot>

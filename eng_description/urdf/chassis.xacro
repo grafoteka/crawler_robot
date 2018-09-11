@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!-- =================================================================================== -->
+<!-- |    Chassis for the robot Jaguar V2 - - - Versionado por Jorge                   | -->
+<!-- |    Jorge De Leon Rivas - - - jorge.deleon@upm.es                                | -->
+<!-- |    September / 6 / 2018                                                         | -->
+<!-- =================================================================================== -->
+
+<robot name="chassis" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- Constant -->
+<xacro:property name="w_radius" value="0.047"/>
+
+<!-- Color -->
+<material name="orange">
+  <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+</material>
+
+<!-- BASE_FOOTPRINT -->
+<link name="base_footprint">
+    <visual>
+        <geometry>
+            <box size="0.0001 0.0001 0.0001"/>
+        </geometry>
+        <material name="transparente">
+            <color rgba="0 0 0 0"/>
+        </material>
+    </visual>
+    <!--inertial>
+         <mass value="0.0001"/>
+         <inertia   ixx="0.0001"    ixy="0"         ixz="0"
+                                    iyy="0.0001"    iyz="0"
+                                                    izz="0.0001" />
+    </inertial-->
+</link>
+
+<!-- BASE_FOOTPRINT JOINT -->
+<joint name="footprint_base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 ${w_radius*2}" rpy="0 0 0"/>
+</joint>
+
+<!-- BASE_LINK -->
+<link name="base_link">
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="10"/>
+        <inertia ixx="${1}"
+                 ixy="${0}"                 iyy="${1}"
+                 ixz="${0}"                 iyz="${0}"                  izz="${1}"/>
+    </inertial>
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <mesh filename="package://eng_description/meshes/Base.dae" scale="0.1 0.1 0.1"/>
+        </geometry>
+        <material name="base_link_material">
+            <color name="orange"/>
+        </material>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <mesh filename="package://eng_description/meshes/Base.dae" scale="0.1 0.1 0.1"/>
+        </geometry>
+    </collision>
+</link>
+
+<gazebo reference="base_link">
+    <mu1 value="100000.0"/>
+    <mu2 value="100000.0"/>
+    <kp  value="10000000.0" />
+    <kd  value="1.0" />
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Orange</material>
+</gazebo>
+
+</robot>

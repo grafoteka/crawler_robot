@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<!-- =================================================================================== -->
+<!-- |    Definicion del robot Jaguar V2 - - - Versionado por Jorge                    | -->
+<!-- |    Jorge De Leon Rivas - - - jorge.deleon@upm.es                                | -->
+<!-- |    September / 6 / 2018                                                         | -->
+<!-- =================================================================================== -->
+
+<robot name="jaguar_v2" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- Files to include in the robot -->
+<xacro:include filename="$(find eng_description)/urdf/chassis.xacro"/>
+<xacro:include filename="$(find eng_description)/urdf/flipper.xacro"/>
+<xacro:include filename="$(find eng_description)/urdf/wheels.xacro"/>
+
+<!-- Import all available sensors -->
+<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+
+<!-- Declaration of the plugin gazebo_ros_control -->
+<gazebo>
+  <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
+    <robotNamespace>/jaguar_v2</robotNamespace>
+    <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+  </plugin>
+</gazebo>
+
+<!-- Declaration of the flippers -->
+<flipper name="right" parent_link="base_link" right="1">
+    <origin rpy="0 0 0" xyz="0.17 0.186 -0.025"/>
+</flipper>
+
+<flipper name="left" parent_link="base_link" right="0">
+    <origin rpy="0 3.1415 0" xyz="-0.17 0.186 -0.025"/>
+</flipper>
+
+<!-- Declaration of the auxiliary wheels -->
+<wheel_aux name="right_front" parent_link="base_link" flipper="0">
+    <origin rpy="0 1.57075 3.1415" xyz="0.22 0.186 -0.025"/>
+</wheel_aux>
+
+<wheel_aux name="left_front" parent_link="base_link" flipper="0">
+    <origin rpy="0 1.57075 3.1415" xyz="-0.22 0.186 -0.025"/>
+</wheel_aux>
+
+<wheel_aux name="right_rear" parent_link="base_link" flipper="0">
+    <origin rpy="0 1.57075 3.1415" xyz="0.15 -0.186 -0.025"/>
+</wheel_aux>
+
+<wheel_aux name="left_rear" parent_link="base_link" flipper="0">
+    <origin rpy="0 1.57075 3.1415" xyz="-0.15 -0.186 -0.025"/>
+</wheel_aux>
+
+<wheel_aux name="right_middle" parent_link="base_link" flipper="0">
+    <origin rpy="0 1.57075 3.1415" xyz="0.15 0.0 -0.025"/>
+</wheel_aux>
+
+<wheel_aux name="left_middle" parent_link="base_link" flipper="0">
+    <origin rpy="0 1.57075 3.1415" xyz="-0.15 0.0 -0.025"/>
+</wheel_aux>
+
+<wheel_aux name="right_flipper" parent_link="right_flipper_link" flipper="1">
+    <origin rpy="0 1.57075 3.1415" xyz="0.03 0.34 0"/>
+</wheel_aux>
+
+<wheel_aux name="left_flipper" parent_link="left_flipper_link" flipper="1">
+    <origin rpy="0 1.57075 3.1415" xyz="0.03 0.34 0"/>
+</wheel_aux>
+
+<!-- Sensors -->
+
+<xacro:sensor_hokuyo_ust10lx prefix="hokuyo" parent="base_link" prefix_topic="/jaguar_v2/laser_scan">
+    <origin xyz="0.0 0.0 0.13" rpy="0 0 ${pi/2}"/>
+</xacro:sensor_hokuyo_ust10lx>
+
+<!-- RGBD -->
+<!--xacro:sensor_orbbec_astra prefix="orbec" parent="base_link" prefix_topic="front_rgbd_camera">
+    <origin xyz="0. 0.0 0.07" rpy="0 0 ${pi/2}"/>
+</xacro:sensor_orbbec_astra-->
+
+</robot>
