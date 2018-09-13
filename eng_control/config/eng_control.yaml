@@ -6,14 +6,16 @@ jaguar_v2:
   #
   # # Position Controllers ---------------------------------------
   joint_left_flipper_controller:
-    type: effort_controllers/JointPositionController
+    type: effort_controllers/JointVelocityController
     joint: left_flipper_to_base_link_joint
-    pid: {p: 400.0, i: 0.01, d: 10.0}
+    #pid: {p: 400.0, i: 0.01, d: 10.0}
+    pid: {p: 10.0, i: 0.01, d: 1.0}
 
   joint_right_flipper_controller:
-    type: effort_controllers/JointPositionController
+    type: effort_controllers/JointVelocityController
     joint: right_flipper_to_base_link_joint
-    pid: {p: 400.0, i: 0.01, d: 10.0}
+    #pid: {p: 400.0, i: 0.01, d: 10.0}
+    pid: {p: 10.0, i: 0.01, d: 1.0}
 
   #joint_cronstein:
   #    type: effort_controllers/JointPositionController
@@ -67,7 +69,6 @@ jaguar_v2:
      type: effort_controllers/JointVelocityController
      joint: left_flipper_wheel_to_left_flipper_link_joint
      pid: {p: 100.0, i: 0.01, d: 10.0, i_clamp: 10.0}
-
 
   joint_right_front_base_link_wheel_controller:
      type: effort_controllers/JointVelocityController
